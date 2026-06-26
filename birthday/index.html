@@ -21,7 +21,113 @@
             padding: 20px;
         }
         
-        .container {
+        /* PIN Login Screen */
+        .pin-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .pin-container.hidden {
+            display: none;
+        }
+        
+        .pin-header {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+        
+        .pin-title {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .pin-subtitle {
+            color: #666;
+            font-size: 1em;
+            margin-bottom: 30px;
+        }
+        
+        .pin-input-group {
+            margin-bottom: 20px;
+        }
+        
+        .pin-input-group label {
+            display: block;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        #pinInput {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5em;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            text-align: center;
+            letter-spacing: 5px;
+            font-weight: bold;
+        }
+        
+        #pinInput:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+        }
+        
+        .pin-button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .pin-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pin-btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .pin-btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .pin-btn-clear {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .pin-btn-clear:hover {
+            background: #e0e0e0;
+        }
+        
+        .pin-error {
+            color: #d32f2f;
+            margin-top: 15px;
+            font-size: 0.95em;
+            display: none;
+        }
+        
+        /* Birthday Content */
+        .birthday-container {
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
@@ -29,6 +135,11 @@
             max-width: 600px;
             text-align: center;
             animation: slideIn 0.5s ease-out;
+            display: none;
+        }
+        
+        .birthday-container.visible {
+            display: block;
         }
         
         @keyframes slideIn {
@@ -145,10 +256,52 @@
             font-size: 0.9em;
             margin-top: 20px;
         }
+        
+        .logout-btn {
+            margin-top: 20px;
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #b71c1c;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- PIN Login Screen -->
+    <div class="pin-container" id="pinContainer">
+        <div class="pin-header">🔐</div>
+        <h2 class="pin-title">Enter PIN</h2>
+        <p class="pin-subtitle">Please enter the PIN to access the birthday page</p>
+        
+        <div class="pin-input-group">
+            <label for="pinInput">PIN:</label>
+            <input 
+                type="password" 
+                id="pinInput" 
+                placeholder="••••" 
+                maxlength="6"
+                onkeypress="handlePinKeypress(event)"
+            >
+        </div>
+        
+        <div class="pin-button-group">
+            <button class="pin-btn pin-btn-clear" onclick="clearPin()">Clear</button>
+            <button class="pin-btn pin-btn-submit" onclick="validatePin()">Submit</button>
+        </div>
+        
+        <div class="pin-error" id="pinError">❌ Incorrect PIN. Please try again.</div>
+    </div>
+    
+    <!-- Birthday Content (Hidden until PIN is correct) -->
+    <div class="birthday-container" id="birthdayContainer">
         <div class="balloons">🎈 🎉 🎊 🎈</div>
         
         <h1>Happy Birthday Eng.Sam!</h1>
@@ -190,14 +343,64 @@
         <div class="footer">
             Thank you for celebrating with Eng.Sam! 💝
         </div>
+        
+        <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
     
     <script>
+        // Configuration
+        const CORRECT_PIN = "1234"; // Change this to your desired PIN
+        
+        function handlePinKeypress(event) {
+            if (event.key === 'Enter') {
+                validatePin();
+            }
+        }
+        
+        function validatePin() {
+            const pinInput = document.getElementById('pinInput');
+            const pinValue = pinInput.value;
+            const pinError = document.getElementById('pinError');
+            
+            if (pinValue === CORRECT_PIN) {
+                // Correct PIN - Show birthday page
+                document.getElementById('pinContainer').classList.add('hidden');
+                document.getElementById('birthdayContainer').classList.add('visible');
+                createConfetti();
+                setInterval(createConfetti, 3000);
+                pinError.style.display = 'none';
+            } else {
+                // Wrong PIN - Show error
+                pinError.style.display = 'block';
+                pinInput.value = '';
+                pinInput.focus();
+                
+                // Shake animation
+                pinInput.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    pinInput.style.animation = '';
+                }, 500);
+            }
+        }
+        
+        function clearPin() {
+            document.getElementById('pinInput').value = '';
+            document.getElementById('pinError').style.display = 'none';
+            document.getElementById('pinInput').focus();
+        }
+        
+        function logout() {
+            document.getElementById('birthdayContainer').classList.remove('visible');
+            document.getElementById('pinContainer').classList.remove('hidden');
+            document.getElementById('pinInput').value = '';
+            document.getElementById('pinError').style.display = 'none';
+            document.getElementById('pinInput').focus();
+        }
+        
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
                 alert('Copied: ' + text);
             }).catch(() => {
-                // Fallback for older browsers
                 const textArea = document.createElement('textarea');
                 textArea.value = text;
                 document.body.appendChild(textArea);
@@ -208,7 +411,6 @@
             });
         }
         
-        // Create confetti effect
         function createConfetti() {
             const colors = ['#667eea', '#764ba2', '#FF6B6B', '#FFD93D', '#6BCB77'];
             for (let i = 0; i < 50; i++) {
@@ -226,7 +428,7 @@
             }
         }
         
-        // Add falling animation
+        // Add animations
         const style = document.createElement('style');
         style.textContent = `
             @keyframes fall {
@@ -235,12 +437,16 @@
                     opacity: 0;
                 }
             }
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
         `;
         document.head.appendChild(style);
         
-        // Trigger confetti on load
-        createConfetti();
-        setInterval(createConfetti, 3000);
+        // Focus on PIN input on page load
+        document.getElementById('pinInput').focus();
     </script>
 </body>
 </html>
