@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Eng.Sam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .balloons {
+            margin-bottom: 30px;
+            font-size: 40px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .message {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .gift-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .gift-title {
+            color: #333;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .payment-details {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 2px solid #667eea;
+        }
+        
+        .detail-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            color: #333;
+            font-size: 1.3em;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+        
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: #764ba2;
+        }
+        
+        .instructions {
+            color: #666;
+            font-size: 1em;
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .confetti {
+            position: fixed;
+            pointer-events: none;
+        }
+        
+        .footer {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="balloons">🎈 🎉 🎊 🎈</div>
+        
+        <h1>Happy Birthday Eng.Sam!</h1>
+        
+        <p class="message">
+            Wishing you a wonderful day filled with joy, laughter, and celebration! 🎂🎁
+        </p>
+        
+        <div class="gift-section">
+            <div class="gift-title">🎁 Send a Birthday Gift</div>
+            
+            <p style="color: #666; margin-bottom: 20px;">
+                Help celebrate by sending a gift via Paybill!
+            </p>
+            
+            <div class="payment-details">
+                <div class="detail-label">Business Number:</div>
+                <div class="detail-value">516600</div>
+                <button class="copy-btn" onclick="copyToClipboard('516600')">Copy</button>
+            </div>
+            
+            <div class="payment-details">
+                <div class="detail-label">Account Number:</div>
+                <div class="detail-value">5491804001</div>
+                <button class="copy-btn" onclick="copyToClipboard('5491804001')">Copy</button>
+            </div>
+            
+            <div class="instructions">
+                <strong>How to Send:</strong><br>
+                1. Go to your M-Pesa or Paybill platform<br>
+                2. Select Paybill<br>
+                3. Enter Business Number: <strong>516600</strong><br>
+                4. Enter Account Number: <strong>5491804001</strong><br>
+                5. Enter amount and complete payment<br>
+                6. Done! Your gift has been sent! 🎉
+            </div>
+        </div>
+        
+        <div class="footer">
+            Thank you for celebrating with Eng.Sam! 💝
+        </div>
+    </div>
+    
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied: ' + text);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Copied: ' + text);
+            });
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#667eea', '#764ba2', '#FF6B6B', '#FFD93D', '#6BCB77'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.textContent = '🎊';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.fontSize = Math.random() * 10 + 15 + 'px';
+                confetti.style.opacity = Math.random() * 0.7 + 0.3;
+                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+        
+        // Add falling animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Trigger confetti on load
+        createConfetti();
+        setInterval(createConfetti, 3000);
+    </script>
+</body>
+</html>
